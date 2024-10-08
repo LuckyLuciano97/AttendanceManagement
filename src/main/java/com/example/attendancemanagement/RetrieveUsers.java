@@ -7,38 +7,46 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
+import static java.lang.System.out;
+
 @WebServlet(name = "RetrieveUsersServlet", urlPatterns = "/retrieve")
 public class RetrieveUsers extends HttpServlet {
 
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
-
-    }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    Connection conn = null;
-    try {
-        Class.forName("com.mysql.jdbc.Driver");
-        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/attendance", "root", "aloha13");
-        PreparedStatement stmt = conn.prepareStatement("Select * FROM ADMIN");
-        ResultSet rs = stmt.executeQuery();
-        while (rs.next()) {
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        Connection conn = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/attendance", "root", "aloha13");
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Users");
+            ResultSet rs = stmt.executeQuery();
 
-            System.out.println(rs.getString("id") + rs.getString("username") + rs.getString("name"));
+            out.println("<table border='1'>");
+            out.println("<tr><th>ID</th><th>Username</th><th>Name</th><th> </th></tr>");
 
+            while (rs.next()) {
+                out.println("<tr>");
+                out.println("<td>" + rs.getString("Userid") + "</td>");
+                out.println("<td>" + rs.getString("username") + "</td>");
+                out.println("<td>" + rs.getString("fullname") + "</td>");
+                out.println("<td>" + "Edit" + "</td>");
+                out.println("</tr>");
+            }
 
+            out.println("</table>");
 
+        } catch (ClassNotFoundException | SQLException e) {
+            out.println("An error occurred: " + e.getMessage());
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        request.getRequestDispatcher("admin.jsp").forward(request, response);
-
-
-    } catch (ClassNotFoundException e) {
-        throw new RuntimeException(e);
-    } catch (SQLException e) {
-        throw new RuntimeException(e);
     }
-
-    }
-
-
 }

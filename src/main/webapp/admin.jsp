@@ -9,39 +9,27 @@
 <html>
 <head>
     <title>Admin Page</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#displayButton").click(function() {
+                $.get("retrieve", function(data) {
+                    $("#userTable").html(data);
+                });
+            });
+        });
+    </script>
 </head>
+<body>
 <h1>Welcome Admin</h1>
 <br>
+<button id="displayButton">Display Users</button>
 
-
-<%--User list with options to delete, edit, read data--%>
-<%--Add another user dropdown--%>
-<%--<%--%>
-<%--    // Retrieve the ResultSet from the request attribute--%>
-<%--    ResultSet rs = (ResultSet) request.getAttribute("resultSet");--%>
-<%--%>--%>
-<table>
-    <tr>
-        <th>ID</th>
-        <th>Username</th>
-        <th>Name</th>
-        <th>Password</th>
-    </tr>
-<%--    <%--%>
-<%--        // Iterate over the ResultSet and display the data--%>
-<%--        while (rs.next()) {--%>
-<%--    %>--%>
-<%--    <tr>--%>
-<%--        <td><%= rs.getInt("id") %></td>--%>
-<%--        <td><%= rs.getString("username") %></td>--%>
-<%--        <td><%= rs.getString("name") %></td>--%>
-<%--        <td><%= rs.getString("password") %></td>--%>
-<%--    </tr>--%>
-<%--    <%--%>
-<%--        }--%>
-<%--    %>--%>
-</table>
-<body>
+<div id="userTable">
+    <!-- The table will be inserted here -->
+</div>
+</body>
+</html>
 
 </body>
 </html>
